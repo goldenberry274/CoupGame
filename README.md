@@ -19,14 +19,16 @@ The goal of the game is to remain the last one standing.
 In each players turn they can perform an action:
 
 # General Actions: Can be used by all players, regardless of class:
+```
 Gather - +1 coin (Doesn't work if sanctioned)
 Tax - +2 coins (Doesn't work if sanctioned, can be blocked by Governor). If Governor, +3 coins
 Bribe - -4 coins, +2 extra turns (can be blocked)
 Arrest - +1 coins to self, -1 coins to target.
 Sanction - -3 coins, prevents economic actions to another player(Gather and tax)
 Coup -7 coins, eliminates a player (Elemination logic in Game class)
-
+```
 # Classes: These are the classes and their passive and active abilities.
+```
 Baron: 
 Passive ability: Gets one coin when sanctioned as conpenscation. 
 Realtime ability: N/E.
@@ -51,3 +53,4 @@ Judge:
 Passive ability: When sanctioned, the perpetrator has to pay an extra coin.
 Realtime ability: Can prevent a player from using Bribe.
 Turn ability: N/E.
+```
