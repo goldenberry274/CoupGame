@@ -12,7 +12,7 @@ Contains both a GUI playable version (Main.cpp) and a Demo that can be played vi
 # Project Structure:
 There are several classes in the game (Spy, Baron, Governor, Judge, Merchant and General).
 All of these inherit from the Player class, with each adding their passive, realtime or turn abilities (See section classes).
-The Game class manages the internal
+The Game class manages the internal affairs of them game such as actions and eleminations. It doesn't rely on input from the trminal or otherwise, classes that do rely on input have to manage it themselves and based on said input, tell gam to perform certain actions.
 Upon starting the game and selecting how many players (Within the appropriate range), the players will then enter their names and each of them will randomly get a class.
 (All classes inherit from Player.hpp)
 The goal of the game is to remain the last one standing. 
