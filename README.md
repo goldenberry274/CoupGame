@@ -54,3 +54,11 @@ Passive ability: When sanctioned, the perpetrator has to pay an extra coin.
 Realtime ability: Can prevent a player from using Bribe.
 Turn ability: N/E.
 ```
+Makefile Commands:
+```
+main: Compiles the main game with the GUI and runs it.
+demo: Compiles the demo file (The terminal version of the game) and runs it.
+test: Compiles the test file and runs it.
+valgrind: runs the valgrind command on the main game with the GUI.
+valgrind-demo: runs the valgrind command on the demo game.
+```
