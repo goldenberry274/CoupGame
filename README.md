@@ -23,7 +23,7 @@ In each players turn they can perform an action:
 Gather - +1 coin (Doesn't work if sanctioned)
 Tax - +2 coins (Doesn't work if sanctioned, can be blocked by Governor). If Governor, +3 coins
 Bribe - -4 coins, +2 extra turns (can be blocked)
-Arrest - +1 coins to self, -1 coins to target.
+Arrest - +1 coins to self, -1 coins to target. If target is a Merchant, -2 coins to them but 0 coins to self
 Sanction - -3 coins, prevents economic actions to another player(Gather and tax)
 Coup -7 coins, eliminates a player (Elemination logic in Game class)
 ```
