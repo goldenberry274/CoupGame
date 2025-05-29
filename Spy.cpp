@@ -11,7 +11,13 @@ using namespace coup;
 Spy::Spy(Game& game, string name) : Player(name, "Spy"){
 	game.add_player(this);
 }
-Spy::Spy(const Spy& spy) : Player(spy.name(), "Spy"){}
+Spy::Spy(const Spy& spy) : Player(spy.name(), "Spy"){
+    coin_num = spy.coins(); 
+    sanctioned = spy.is_sanctioned();
+    extra_turns = spy.extra_turns;
+    is_alive = spy.alive();
+    last_arrest = spy.last_player_arrested();
+}
 
 Spy::~Spy(){}
 
