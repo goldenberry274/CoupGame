@@ -2,6 +2,7 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+
 #include "Player.hpp"
 
 #define BRIBE_LIMIT 4
@@ -13,6 +14,7 @@
 #define ARREST_PAYMENT 1
 
 #define EXTRA_TURNS_BRIBE 2
+#define MUST_COUP_BAR 10
 
 using namespace std;
 using namespace coup;
@@ -28,10 +30,19 @@ Player::Player(string cpy_name, string cpy_role) {
     player_role = cpy_role;
     coin_num = 0;
     sanctioned = false;
-    arrest_blocked = false;
     last_arrest = "";
     extra_turns = 0;
 	is_alive = true;
+}
+
+Player::Player(Player& copy){
+    player_name = copy.name();
+    player_role = copy.role();
+    coin_num = copy.coins();
+    sanctioned = copy.is_sanctioned();
+    last_arrest = copy.last_player_arrested();
+    extra_turns = copy.get_extra_turns();
+    is_alive = copy.alive();
 }
 
 Player::~Player() = default;
@@ -52,32 +63,38 @@ bool Player::is_sanctioned() const {
     return sanctioned;
 }
 
-bool Player::is_arrest_blocked() const {
-    return arrest_blocked;
+
+string Player::last_player_arrested() const{
+    return last_arrest;
+}
+bool Player::alive(){
+    return is_alive;
 }
 
 void Player::set_sanction(bool new_sanctioned) {
     sanctioned = new_sanctioned;
 }
 
-void Player::set_arrest_block(bool new_arrest_blocked) {
-    arrest_blocked = new_arrest_blocked;
-}
+
 
 void Player::turn_cycle_start() {
-    sanctioned = false;
-    arrest_blocked = false;
     if (extra_turns > 0) {
         extra_turns--;
     }
 }
 
-bool Player::add_coins(size_t coins, bool add) {
+void Player::turn_end(){
+    if (sanctioned)
+        sanctioned = false;
+}
+bool Player::change_coins(size_t coins, bool add) {
     if (add) {
         coin_num += coins;
         return true;
     } else {
+        cout << "Player has " << coin_num  << " coins" << endl;
         if (coins > coin_num) {
+            cout << "Setting coins to 0" << endl;
             coin_num = 0;
             return false;
         }
@@ -91,14 +108,22 @@ bool Player::can_bribe() const {
 }
 
 bool Player::can_arrest(const Player* arrested) const {
-    return !arrest_blocked && arrested->name() != last_arrest;
+    if (arrested == nullptr || arrested == this)
+        throw "Invalid argument in can_arrest";
+   
+    size_t paywall = 1;
+    if (arrested->role() == "Merchant")
+        paywall++;
+
+    return arrested->name() != last_arrest && arrested->coins() >= paywall;
 }
 
 bool Player::can_sanction(const Player* player) const {
-    if (player == nullptr) 
-		throw invalid_argument("Null player pointer in can_sanction");
-
-    int paywall = SANCTION_LIMIT;
+    if (player == nullptr || player == this)
+        throw "Invalid argument in can_sanction";
+    if (player->is_sanctioned())
+        return false;
+    size_t paywall = SANCTION_LIMIT;
     if (player->role() == "Judge") 
 		paywall++;
 
@@ -118,14 +143,27 @@ void Player::tax() {
 }
 
 void Player::bribe() {
+    if (!can_bribe())
+        throw "Illegal action: Player doesn't have enough coins to bribe";
     coin_num -= BRIBE_LIMIT;
     extra_turns += EXTRA_TURNS_BRIBE;
     
 }
 
+void Player::subtract_turn(){
+    if (extra_turns < 1)
+        return;
+    extra_turns--;
+}
+
+size_t Player::get_extra_turns(){
+    return extra_turns;
+}
+
+
 void Player::arrest(const Player* arrested) {
-    if (arrested == nullptr)
-        throw "Invalid argument";
+    if (arrested == nullptr || arrested == this)
+        throw "Invalid argument in arrested";
 
     last_arrest = arrested->name();
     if (!(arrested->role() == "Merchant"))
@@ -133,14 +171,17 @@ void Player::arrest(const Player* arrested) {
 }
 
 void Player::when_arrested() {
+    if (coin_num < ARREST_PAYMENT){
+        throw "Too little coins for arrest";
+    }
     coin_num -= ARREST_PAYMENT;
 }
 
-void Player::sanction(const Player* sancioned) {
-    if (sancioned == nullptr)
+void Player::sanction(const Player* sanctioned) {
+    if (sanctioned == nullptr || sanctioned == this)
         throw "Invalid argument";
     int paywall = SANCTION_LIMIT;
-    if (sancioned->role() == "Judge")
+    if (sanctioned->role() == "Judge")
         paywall++;
     coin_num -= paywall;
 }
@@ -156,10 +197,47 @@ void Player::coup() {
 void Player::when_couped(){
     is_alive = false;
 }
-bool Player::can_use_ability() const {
-    return true;
+
+bool Player::must_coup(){
+    return coin_num >= MUST_COUP_BAR;
+}
+//By default, players don't have an ability: Some classes don't have time abilities or realtime ones. In the case they are needed, these methods are overloaded in the classes that use them differently.
+bool Player::can_use_turn_ability() const {
+    return false;
 }
 
-void Player::role_ability(){
+void Player::turn_ability(){
     return;
+}
+
+size_t Player::turn_ability(const Player* player){
+    return 0;
+}
+
+bool Player::can_use_realtime_ability() const{
+    return false;
+}
+
+void Player::realtime_ability(){
+    return;
+}
+
+void Player::undo_tax(){
+
+    coin_num -= TAX_PAYMENT;
+}
+
+void Player::undo_arrest(bool arrested, Player* target){
+    if (!target)
+        throw "Invalid argument: Null pointer";
+    if (arrested)
+        coin_num++;
+    else if (target->role() == "Merchant")
+        return;
+    else
+        change_coins(1, false);
+}
+
+void Player::undo_bribe(){
+    extra_turns = 0;
 }
