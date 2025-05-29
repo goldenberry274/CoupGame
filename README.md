@@ -6,10 +6,10 @@ To install wxWidgets on Ubuntu, run these commands:
 sudo apt update
 sudo apt-get install libwxgtk3.0-dev
 ``` 
-To install wxWidgets on Ubuntu, run these commands:
+To install SFML on Ubuntu, run these commands:
 ```
 sudo apt update
-sudo apt install libsfml-dev
+sudo apt-get install libsfml-dev
 ```
 ## Project Overview:
 This project is a game of Coup designed to be played locally on s aingle computer between multiple people (2-6).
