@@ -9,8 +9,7 @@ namespace coup{
 	class Spy: public Player{
 		public:
 			Spy(Game& game, string name);
-			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game
-			Spy(const Spy& spy);
+
 			~Spy();
 			//Spy has a turn ability. Returns true.
 			bool can_use_turn_ability() const override;
