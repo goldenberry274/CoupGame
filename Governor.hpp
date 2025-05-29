@@ -14,10 +14,15 @@ namespace coup{
 		public:
 			Governor(Game& game, string name);
 			~Governor();
-
+			//The Governor's passive ability is that they gain 3 coins instead of 2 when taxing
+			//Adds 3 to the coin number
 			void tax() override;
-			//Add later: accepting user input. Return true if the player wants to cancel tax and false if not
-			bool undo_tax(Player* player);	
+			//The Governor can prevent a player from using Tax.
+			//Returns true
+			bool can_use_realtime_ability() const override;
+			//Since the governor gets a different amount of coins from a player when taxing, they must also 
+			//Subtracts 3 from the coin number
+			void undo_tax() override;
 	
 	};
 
