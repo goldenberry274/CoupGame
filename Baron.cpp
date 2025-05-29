@@ -13,6 +13,7 @@ Baron::Baron(Game& game, string name) : Player(name, "Baron"){
 	game.add_player(this);
 }
 
+Baron::Baron(const Baron& copy) : Player(copy.name(), "Baron"){}
 Baron::~Baron(){}
 
 bool Baron::can_use_turn_ability() const{
