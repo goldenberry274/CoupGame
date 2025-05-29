@@ -12,6 +12,8 @@ Merchant::Merchant(Game& game, string name) : Player(name, "Merchant"){
     game.add_player(this);
 }
 
+Merchant::Merchant(const Merchant& copy): Player(copy.name(), "Merchant"){}
+
 Merchant::~Merchant(){}
 
 void Merchant::turn_cycle_start(){
