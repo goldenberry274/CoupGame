@@ -15,17 +15,18 @@ Baron::Baron(Game& game, string name) : Player(name, "Baron"){
 
 Baron::~Baron(){}
 
-bool Baron::can_use_ability() const{
+bool Baron::can_use_turn_ability() const{
     
     return coin_num >= INVESTMENT_PAYMENT;
     
 }
-void Baron::role_ability(){
+void Baron::turn_ability(){
+    if (!can_use_turn_ability())
+        throw "Not enough coins to use ability";
     coin_num += INVESTMENT_PROFIT - INVESTMENT_PAYMENT;
 }
 
-bool Baron::when_sanctioned(Player* player){
+void Baron::when_sanctioned(){
     sanctioned = true;
     coin_num++;
-    return true;
 }
