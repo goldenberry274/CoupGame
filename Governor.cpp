@@ -13,7 +13,13 @@ Governor::Governor(Game& game, string name) : Player(name, "Governor"){
 	game.add_player(this);
 }
 
-Governor::Governor(const Governor& copy) : Player(copy.name(), "Governor"){}
+Governor::Governor(const Governor& copy) : Player(copy.name(), "Governor"){
+    coin_num = copy.coins(); 
+    sanctioned = copy.is_sanctioned();
+    extra_turns = copy.extra_turns;
+    is_alive = copy.alive();
+    last_arrest = copy.last_player_arrested();
+}
 Governor::~Governor(){}
 
 void Governor::tax() {
