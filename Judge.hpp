@@ -9,6 +9,8 @@ namespace coup{
 	class Judge: public Player{
 		public:
 			Judge(Game& game, string name);
+			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game			
+			Judge(const Judge& copy);
 			~Judge();
 			//The judge can prevent a player from using the Bribe action.
 			//Returns true
