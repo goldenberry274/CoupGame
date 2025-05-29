@@ -19,7 +19,7 @@ namespace coup {
 	
     public:
         Player(string cpy_name, string cpy_role);
-        Player(Player& copy);
+        Player(const Player& copy);
         virtual ~Player();
 
         // === Getters ===
@@ -29,7 +29,7 @@ namespace coup {
         bool is_sanctioned() const;
         string last_player_arrested() const;
         bool is_arrest_blocked() const;
-        bool alive();
+        bool alive() const;
 
         // === Setters ===
         void set_sanction(bool new_sanction);
@@ -37,17 +37,24 @@ namespace coup {
 
         // === Coin management ===
         // If `add` is true, adds coins; otherwise attempts to subtract.
+        //If there are too many coins to subtract, sets the coins to 0
         bool change_coins(size_t coins, bool add);
 
         // === Action availability checks ===
+        //Returns true if player has 4 or more coins
         bool can_bribe() const;
+        //Returns true if arrested->name() != last_arrest and arrested has enough coins for arrest (2 for Merchant, 1 for everybody else)
         bool can_arrest(const Player* arrested) const;
+        //Returns true if user has enough coins to sanction (3 for regular players, an extra if the target is a Judge) and if the target isn't already sanctioned
         bool can_sanction(const Player* player) const;
+        //Returns true if player has 7 or more coins
         bool can_coup() const;
 
         // === Turn lifecycle ===
-        virtual void turn_cycle_start(); //If Merchant and coin_num >= 3, +1 free coin
-        //If sanctioned == true, set it to false. Used when the player ends their turn in Game.cpp
+        //Takes care of subracting extra turns at the start of the turn when there are
+        //Overriden in Merchant.hpp 
+        virtual void turn_cycle_start(); 
+        //If sanctioned == true, set it to false. 
         void turn_end();
         // === Basic actions ===
         void gather();                  // +1 coin (Doesn't work if sanctioned)
@@ -64,8 +71,8 @@ namespace coup {
         void arrest(const Player* arrested);   
         // -1 coin, unless Merchant. (See Merchant.hpp and Merchant.cpp for override) 
         virtual void when_arrested();           
-
-        void sanction(const Player* sanctioned);// -3 coins, prevents economic actions (Gather and tax)
+        // -3 coins, prevents economic actions (Gather and tax). If sanctioned is Judge, -1 extra coin
+        void sanction(const Player* sanctioned);
         virtual void when_sanctioned();         // Sets the "sanction" field to "true". If Baron, get 1 coin (See Baron.hpp and Baron.cpp)
         
         void coup();                            // -7 coins, eliminates a player (Elemination logic in Game class) 
@@ -80,6 +87,7 @@ namespace coup {
         //Role specific realtime abilities. Called when certian actions can be prevented. The Spy, General, Governor and Judge have such abilities
         //(See Spy.hpp, General.hpp and Governor.hpp for more detail)
         virtual bool can_use_realtime_ability() const;
+        //Returns nothing
         //See General.hpp, Spy.hpp and Judge.hpp for the overridings of this method
         virtual void realtime_ability() ;
 
