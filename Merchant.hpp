@@ -8,8 +8,7 @@ namespace coup{
 	class Merchant: public Player{
 		public:
 			Merchant(Game& game, string name);
-			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game
-			Merchant(const Merchant& copy);
+
 			~Merchant();
 			//If the Merchant has more than 3 coins, they get 1 coin for free at the start of their turn
 			void turn_cycle_start() override;
