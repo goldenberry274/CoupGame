@@ -12,14 +12,6 @@ Merchant::Merchant(Game& game, string name) : Player(name, "Merchant"){
     game.add_player(this);
 }
 
-Merchant::Merchant(const Merchant& copy): Player(copy.name(), "Merchant"){
-    coin_num = copy.coins(); 
-    sanctioned = copy.is_sanctioned();
-    extra_turns = copy.extra_turns;
-    is_alive = copy.alive();
-    last_arrest = copy.last_player_arrested();
-}
-
 Merchant::~Merchant(){}
 
 void Merchant::turn_cycle_start(){
