@@ -7,8 +7,12 @@
 namespace coup{
 
 	class Judge: public Player{
-		Judge(Game& game, string name);
-		~Judge();
+		public:
+			Judge(Game& game, string name);
+			~Judge();
+			//The judge can prevent a player from using the Bribe action.
+			//Returns true
+			bool can_use_realtime_ability() const override;
 	};
 };
 
