@@ -13,8 +13,7 @@ namespace coup{
 	class Governor: public Player{
 		public:
 			Governor(Game& game, string name);
-			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game
-			Governor(const Governor& copy);
+
 			~Governor();
 			//The Governor's passive ability is that they gain 3 coins instead of 2 when taxing
 			//Adds 3 to the coin number
