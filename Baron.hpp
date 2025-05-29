@@ -13,11 +13,12 @@ namespace coup{
 		public:
 			Baron(Game& game, string name);
 			~Baron();
-			//Braon ability: Invest 3 coins to earn 6
-			void role_ability() override;
-			bool can_use_ability() const override;
-
-			bool when_sanctioned(Player* player);
+			//Subtracts 3 coins and adds 6
+			void turn_ability() override;
+			//Returns true if the Baron has more than 3 coins
+			bool can_use_turn_ability() const override;
+			//When sanctioned, the Baron gets 1 coin as conpenscation
+			void when_sanctioned() override;
 	};
 
 }
