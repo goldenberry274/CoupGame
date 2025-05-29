@@ -12,6 +12,8 @@ namespace coup{
 	class Baron: public Player{
 		public:
 			Baron(Game& game, string name);
+			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game
+			Baron(const Baron& copy);
 			~Baron();
 			//Subtracts 3 coins and adds 6
 			void turn_ability() override;
