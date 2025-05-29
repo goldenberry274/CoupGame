@@ -17,8 +17,11 @@ Governor::~Governor(){}
 void Governor::tax() {
 	coin_num += TAX_PAYMENT;
 }
-bool Governor::undo_tax(Player* player){
+bool Governor::can_use_realtime_ability() const{
 	return true;
 } 
 
+void Governor::undo_tax(){
+	coin_num -= TAX_PAYMENT;
+}
 
