@@ -17,6 +17,33 @@ TEST_CASE("Player constructor validation") {
     CHECK_THROWS_AS(Player("John", "InvalidRole"), std::invalid_argument);
 }
 
+TEST_CASE("Player copy constructor copies all relevant fields correctly") {
+    Player original("Alice", "Merchant");
+    
+    // Set some state
+    original.change_coins(5, true);          // Assume this sets coin_num to 5
+    original.when_sanctioned();     // Assume you have a setter or set directly if public/protected
+    original.when_couped();         // Again, assume you have a setter
+    original.bribe();       // -4 coins
+    Player* target = new Player("Bob", "Spy");
+    target->change_coins(2, true); 
+    original.arrest(target); // Simulate arresting someone, +1 coin
+
+    // Perform copy
+    Player copy(original);
+
+    // Now assert fields are copied
+    CHECK(copy.name() == "Alice");
+    CHECK(copy.role() == "Merchant");
+    CHECK(copy.coins() == 2);
+    CHECK(copy.is_sanctioned() == true);
+    CHECK(copy.alive() == false);
+    CHECK(copy.get_extra_turns() == 2);
+    CHECK(copy.last_player_arrested() == target->name());
+
+    // Check that they are different objects
+    CHECK(&copy != &original);
+}
 TEST_CASE("Basic attributes and getters") {
     Player p("Alice", "Governor");
 
