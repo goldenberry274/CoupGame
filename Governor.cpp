@@ -12,6 +12,8 @@ using namespace coup;
 Governor::Governor(Game& game, string name) : Player(name, "Governor"){
 	game.add_player(this);
 }
+
+Governor::Governor(const Governor& copy) : Player(copy.name(), "Governor"){}
 Governor::~Governor(){}
 
 void Governor::tax() {
