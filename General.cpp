@@ -10,7 +10,13 @@ General::General(Game& game, string name) : Player(name, "General"){
 	game.add_player(this);
 }
 
-General::General(const General& copy) : Player(copy.name(), "General"){}
+General::General(const General& copy) : Player(copy.name(), "General"){
+    coin_num = copy.coins(); 
+    sanctioned = copy.is_sanctioned();
+    extra_turns = copy.extra_turns;
+    is_alive = copy.alive();
+    last_arrest = copy.last_player_arrested();
+}
 
 General::~General(){}
 
