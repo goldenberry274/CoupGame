@@ -8,6 +8,8 @@ namespace coup{
 	class General: public Player{
 		public:
 			General(Game& game, string name);
+			//Important! Since the Game class doesn't allow for duplicate names, this copy constructor doesn't add the class to the game
+			General(const General& copy);
 			~General();
 			//The General can undo a coup at the cost of 5 coins
 			//Returns true if they have enough (More than 5) and false otherwise
