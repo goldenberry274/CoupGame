@@ -61,4 +61,5 @@ demo: Compiles the demo file (The terminal version of the game) and runs it.
 test: Compiles the test file and runs it.
 valgrind: runs the valgrind command on the main game with the GUI.
 valgrind-demo: runs the valgrind command on the demo game.
+valgrind-test: runs the valgrind command on the test of the game.
 ```
