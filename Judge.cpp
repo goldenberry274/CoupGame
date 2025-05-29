@@ -11,3 +11,6 @@ Judge::Judge(Game& game, string name) : Player(name, "Judge"){
 
 Judge::~Judge(){}
 
+bool Judge::can_use_realtime_ability() const{
+	return true;
+}
