@@ -10,6 +10,8 @@ General::General(Game& game, string name) : Player(name, "General"){
 	game.add_player(this);
 }
 
+General::General(const General& copy) : Player(copy.name(), "General"){}
+
 General::~General(){}
 
 bool General::can_use_realtime_ability() const{
