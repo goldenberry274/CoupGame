@@ -8,7 +8,8 @@ namespace coup{
 	class Merchant: public Player{
 		public:
 			Merchant(Game& game, string name);
-
+			Merchant(const Merchant& copy);
+			Merchant(const Player& copy);
 			~Merchant();
 			//If the Merchant has more than 3 coins, they get 1 coin for free at the start of their turn
 			void turn_cycle_start() override;
