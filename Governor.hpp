@@ -13,7 +13,8 @@ namespace coup{
 	class Governor: public Player{
 		public:
 			Governor(Game& game, string name);
-
+			Governor(const Governor& copy);
+			Governor(const Player& copy);
 			~Governor();
 			//The Governor's passive ability is that they gain 3 coins instead of 2 when taxing
 			//Adds 3 to the coin number
