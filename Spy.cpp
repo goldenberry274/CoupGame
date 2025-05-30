@@ -12,8 +12,23 @@ Spy::Spy(Game& game, string name) : Player(name, "Spy"){
 	game.add_player(this);
 }
 
+Spy::Spy(const Spy& copy) : Player(copy.name(), "Spy"){
+    coin_num = 0;
+    sanctioned = copy.is_sanctioned();
+    last_arrest = copy.last_arrest;
+    extra_turns = copy.extra_turns;
+	is_alive = copy.alive();
+}
 
 Spy::~Spy(){}
+
+Spy::Spy(const Player& copy) : Player(copy.name(), "Spy"){
+	coin_num = copy.coins();
+    sanctioned = copy.is_sanctioned();
+    last_arrest = copy.last_player_arrested();
+    extra_turns = copy.get_extra_turns();
+	is_alive = copy.alive();
+}
 
 bool Spy::can_use_turn_ability() const{
 	return true;
