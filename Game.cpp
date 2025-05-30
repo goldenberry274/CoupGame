@@ -4,6 +4,12 @@
 
 #include "Game.hpp"
 #include "Player.hpp"
+#include "Spy.hpp"
+#include "Judge.hpp"
+#include "Governor.hpp"
+#include "Merchant.hpp"
+#include "General.hpp"
+#include "Baron.hpp"
 
 #define MIN_PLAYERS 2
 #define MAX_PLAYERS 6
@@ -28,6 +34,37 @@ Game::Game(size_t new_player_amount) : player_amount(new_player_amount){
 	curr_turn = 0;
 	game_winner = "";
 }
+
+Game::Game(const Game& other)
+    : player_amount(other.player_amount),
+      curr_turn(other.curr_turn),
+      game_winner(other.game_winner),
+      current_player(nullptr)
+{
+    for (Player* p : other.game_players) {
+		Player* new_p;
+		if (p->role() == "Spy"){
+			new_p = new Spy(*(p));
+		}
+		else if (p->role() == "Judge")
+			new_p = new Judge(*(p));
+		else if (p->role() == "Baron")
+			new_p = new Baron(*(p));
+		else if (p->role() == "Merchant")
+			new_p = new Merchant(*(p));
+		else if (p->role() == "General")
+			new_p = new General(*(p));
+		else
+			new_p = new Governor(*(p));
+        game_players.push_back(new_p);
+        
+        // Set current_player if it matches
+        if (p == other.current_player) {
+            current_player = new_p;
+        }
+    }
+}
+
 
 
 Game::~Game(){
@@ -59,11 +96,13 @@ Player* Game::get_current_player(){
     while (tries < game_players.size()) {
         size_t index = curr_turn % player_amount;
         if (game_players[index]->alive()) {
-            return game_players[index];
+			current_player = game_players[index];
+            return current_player;
         }
         curr_turn++;
         tries++;
     }
+	
     return nullptr;
 }
 
