@@ -35,10 +35,14 @@ Player::Player(string cpy_name, string cpy_role) {
 	is_alive = true;
 }
 
-Player::Player(const Player& copy): player_name(copy.name()), player_role(copy.role()), coin_num(copy.coins()),sanctioned(copy.is_sanctioned()),last_arrest(copy.last_player_arrested())
-{
-    extra_turns = copy.extra_turns;
-    is_alive = copy.alive();
+Player::Player(const Player& copy)
+    : player_name(copy.name()),
+      player_role(copy.role()),
+      coin_num(copy.coins()),
+      sanctioned(copy.is_sanctioned()),
+      last_arrest(copy.last_player_arrested()),
+      extra_turns(copy.extra_turns),
+      is_alive(copy.alive()) {
 }
 
 
@@ -153,7 +157,7 @@ void Player::subtract_turn(){
     extra_turns--;
 }
 
-size_t Player::get_extra_turns(){
+size_t Player::get_extra_turns() const{
     return extra_turns;
 }
 
