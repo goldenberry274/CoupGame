@@ -613,3 +613,63 @@ TEST_CASE("Baron class behavior") {
     }
 
 }
+
+
+TEST_CASE("Game::prevent_arrest - valid and invalid cases") {
+    Game game(2);
+    Judge* judge = new Judge(game, "Judge1");
+    Spy* spy = new Spy(game, "Spy1");
+
+    // Give current player (Judge) coins and simulate arrest
+    judge->change_coins(5, true); 
+    spy->change_coins(5, true);
+
+    // Spy arrests judge
+    
+    spy->arrest(judge);
+
+    // Now prevent arrest
+    game.arrest(judge, spy);
+    CHECK_NOTHROW(game.prevent_arrest(judge, spy));
+
+    // Invalid: nullptr input
+    CHECK_THROWS_WITH(game.prevent_arrest(nullptr, judge), "Invalid argument: Null pointer: prevent_arrest");
+    CHECK_THROWS_WITH(game.prevent_arrest(spy, nullptr), "Invalid argument: Null pointer: prevent_arrest");
+
+    // Invalid: wrong turn
+
+    CHECK_THROWS_WITH(game.prevent_arrest(spy, judge), "Not your turn");
+}
+
+TEST_CASE("Game::prevent_coup - valid and invalid cases") {
+    Game game(3);
+    Spy* spy = new Spy(game, "Spy1");
+
+    General* general = new General(game, "General1");
+
+    spy->change_coins(7, true);  // enough to coup
+    general->change_coins(5, true);  // enough to prevent
+
+    // Valid prevention
+    CHECK_NOTHROW(game.prevent_coup(spy, general));
+    CHECK(general->coins() == 0); // spent 5 to prevent
+
+    // Invalid: nullptrs
+    CHECK_THROWS_WITH(game.prevent_coup(nullptr, general), "Invalid arguemnt: Null pointer given");
+    CHECK_THROWS_WITH(game.prevent_coup(spy, nullptr), "Invalid arguemnt: Null pointer given");
+
+    // Invalid: wrong turn
+    game.update_turn();
+    CHECK_THROWS_WITH(game.prevent_coup(spy, general), "Invalid argument: Not your turn");
+
+    game.update_turn();
+    // Invalid: not enough coins
+    spy->change_coins(7, true);
+    general->change_coins(3, true);
+    CHECK_THROWS_WITH(game.prevent_coup(spy, general), "Invalid argument: Preventer doesn't have enough coins to prevent the coup");
+
+    // Invalid: wrong role
+    Merchant* merchant = new Merchant(game, "Merchant1");
+    merchant->change_coins(10, true);
+    CHECK_THROWS_WITH(game.prevent_coup(spy, merchant), "Invalid argument: Only a General can prevent a coup");
+}
