@@ -1,7 +1,8 @@
 #include <string.h>
 
 #include "Merchant.hpp"
-
+#include "Player.hpp"
+#include "Game.hpp"
 using namespace coup;
 using namespace std;
 
@@ -12,7 +13,25 @@ Merchant::Merchant(Game& game, string name) : Player(name, "Merchant"){
     game.add_player(this);
 }
 
+Merchant::Merchant(const Merchant& copy) : Player(copy.name(), "Merchant"){
+    coin_num = copy.coins();
+    sanctioned = copy.is_sanctioned();
+    last_arrest = copy.last_arrest;
+    extra_turns = copy.extra_turns;
+	is_alive = copy.alive();
+}
+
+Merchant::Merchant(const Player& copy) : Player(copy.name(), "Merchant"){
+    coin_num = copy.coins();
+    sanctioned = copy.is_sanctioned();
+    last_arrest = copy.last_player_arrested();
+    extra_turns = copy.get_extra_turns();
+	is_alive = copy.alive();
+}
+
 Merchant::~Merchant(){}
+
+
 
 void Merchant::turn_cycle_start(){
     if (coin_num >= BAR_FOR_EXTRA_COIN)
