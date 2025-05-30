@@ -9,7 +9,8 @@ namespace coup{
 	class Judge: public Player{
 		public:
 			Judge(Game& game, string name);
-
+			Judge(const Judge& copy);
+			Judge(const Player& copy);
 			~Judge();
 			//The judge can prevent a player from using the Bribe action.
 			//Returns true
