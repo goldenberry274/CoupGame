@@ -12,7 +12,8 @@ namespace coup{
 	class Baron: public Player{
 		public:
 			Baron(Game& game, string name);
-
+			Baron(const Baron& copy);
+			Baron(const Player& copy);
 			~Baron();
 			//Subtracts 3 coins and adds 6
 			void turn_ability() override;
