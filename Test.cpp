@@ -44,6 +44,8 @@ TEST_CASE("Player copy constructor copies all relevant fields correctly") {
     // Check that they are different objects
     CHECK(&copy != &original);
 }
+
+
 TEST_CASE("Basic attributes and getters") {
     Player p("Alice", "Governor");
 
@@ -55,6 +57,141 @@ TEST_CASE("Basic attributes and getters") {
     CHECK(p.alive());
 }
 
+TEST_CASE("Spy copy constructor") {
+    Game game(2);
+    Spy* original = new Spy(game, "OriginalSpy");
+    Baron*  addition = new Baron(game, "Add");
+    original->change_coins(3, true);
+    cout << "Original has " << original->coins() << " coins" << endl;
+    original->when_sanctioned();
+    Spy* copy = original;
+    cout << "Copy has " << copy->coins() << " coins" << endl;
+    CHECK(copy->name() == "OriginalSpy");
+    CHECK(copy->role() == "Spy");
+    CHECK(copy->coins() == 3);
+    CHECK(copy->is_sanctioned() == true);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("Baron copy constructor") {
+    Game game(2);
+    Baron* original = new Baron(game, "OriginalBaron");
+    Spy* addition = new Spy(game, "Add");
+
+    original->change_coins(5, true);
+    original->when_sanctioned();
+
+    Baron* copy = new Baron(*original);
+
+    CHECK(copy->name() == "OriginalBaron");
+    CHECK(copy->role() == "Baron");
+    CHECK(copy->coins() == 6);  // when_sanctioned gives +1
+    CHECK(copy->is_sanctioned() == true);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("Governor copy constructor") {
+    Game game(2);
+    Governor* original = new Governor(game, "OriginalGovernor");
+    Baron* addition = new Baron(game, "Add");
+
+    original->change_coins(2, true);
+
+    Governor* copy = new Governor(*original);
+
+    CHECK(copy->name() == "OriginalGovernor");
+    CHECK(copy->role() == "Governor");
+    CHECK(copy->coins() == 2);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("General copy constructor") {
+    Game game(2);
+    General* original = new General(game, "OriginalGeneral");
+    Baron* addition = new Baron(game, "Add");
+
+    original->change_coins(5, true);
+
+    General* copy = new General(*original);
+
+    CHECK(copy->name() == "OriginalGeneral");
+    CHECK(copy->role() == "General");
+    CHECK(copy->coins() == 5);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("Merchant copy constructor") {
+    Game game(2);
+    Merchant* original = new Merchant(game, "OriginalMerchant");
+    Baron* addition = new Baron(game, "Add");
+
+    original->change_coins(4, true);
+    original->bribe();
+
+    Merchant* copy = new Merchant(*original);
+
+    CHECK(copy->name() == "OriginalMerchant");
+    CHECK(copy->role() == "Merchant");
+    CHECK(copy->coins() == 0);
+    CHECK(copy->get_extra_turns() == 2);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("Judge copy constructor") {
+    Game game(2);
+    Judge* original = new Judge(game, "OriginalJudge");
+    Baron* addition = new Baron(game, "Add");
+
+    original->change_coins(1, true);
+
+    Judge* copy = new Judge(*original);
+
+    CHECK(copy->name() == "OriginalJudge");
+    CHECK(copy->role() == "Judge");
+    CHECK(copy->coins() == 1);
+    CHECK(copy->alive() == true);
+}
+
+TEST_CASE("Game copy constructor") {
+    // Original game setup
+    Game original_game(3);
+    Spy* spy = new Spy(original_game, "SpyPlayer");
+    General* general = new General(original_game, "GeneralPlayer");
+    Baron* baron = new Baron(original_game, "BaronPlayer");
+
+    spy->change_coins(2, true);
+    general->change_coins(5, true);
+    baron->change_coins(3, true);
+    baron->when_sanctioned();
+
+    
+
+    // Copy the game
+    Game copied_game(original_game);
+
+    // Ensure player count is the same
+    CHECK(copied_game.player_vector().size() == 3);
+
+    // Get copied players
+    std::vector<Player*> copied_players = copied_game.player_vector();
+
+    // Check each player's role and properties
+    CHECK(copied_players[0]->name() == "SpyPlayer");
+    CHECK(copied_players[0]->role() == "Spy");
+    CHECK(copied_players[0]->coins() == 2);
+
+    CHECK(copied_players[1]->name() == "GeneralPlayer");
+    CHECK(copied_players[1]->role() == "General");
+    CHECK(copied_players[1]->coins() == 5);
+
+    CHECK(copied_players[2]->name() == "BaronPlayer");
+    CHECK(copied_players[2]->role() == "Baron");
+    CHECK(copied_players[2]->coins() == 4); // when_sanctioned adds 1
+    CHECK(copied_players[2]->is_sanctioned() == true);
+
+    // Verify current_player is correctly copied
+    CHECK(copied_game.get_current_player()->name() == "SpyPlayer");
+}
 TEST_CASE("Coin manipulation") {
     Player p("Bob", "General");
 
