@@ -317,10 +317,7 @@ vector<Player*> Game::prevent_check(Player* does_action, string action){
 		preventer_role = "Governor";
 	else if (action == BRIBE)
 		preventer_role = "Judge";
-	else if (action == COUP)
-		preventer_role = "General";
-	else
-		preventer_role = "Spy";
+
 	
 	for (Player* player: game_players){
 		if (player->role() == preventer_role){
