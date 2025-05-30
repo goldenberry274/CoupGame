@@ -21,24 +21,30 @@ namespace coup{
 
         public:
             Game(size_t new_player_amount = 3);
+			Game(const Game& copy);
         	~Game();
 
         	//General getters
 
 			//Returns the names of all the players in a vector
+			//If there are no players, returns an empty vector
        		vector<string> players();
 			//Returns the pointers to all the players in a vector
+			//If there are no players, returns an empty vector
 			vector<Player*> player_vector() const;
-			//Returns the player whose turn it is
+			//Returns the name of the player whose turn it is
       		string turn();	
-			//Returns the name of the winner in a string formar 
+			//Returns the name of the winner
+			//If there is no winner, returns an empty string ("")
 			string winner();
 			//Returns true if there is only one player left
 			bool is_there_a_winner(); 
-			//Important! The assumption here is that the game is full of players
+			//Returns the player whose turn it is now
 			Player* get_current_player();
 			
-			//Adding names
+			//Adding a Player* to the vector.
+			//Throws an expection if: There are enough players (player_amount) already or if the name of the player is already in the list
+			//Duplicate names are not allowed!
 			void add_player(Player* add_player);
 			//Updating the turn
 			void update_turn();
