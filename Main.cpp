@@ -393,8 +393,7 @@ void MainFrame::OnArrest(wxCommandEvent& event) {
                                              p->name(), target->name());
                 int choice = wxMessageBox(msg, "Prevent Arrest", wxYES_NO | wxICON_QUESTION);
                 if (choice == wxYES) {
-                    game.prevent_action(currentPlayer, "Arrest");
-                    game.prevent_action(target, "Arrest");
+                    game.prevent_arrest(currentPlayer, target);
                     LogAction(p->name() + " prevented " + target->name() + "'s Arrest!");
                     UpdatePlayerInfo();
                     game.update_turn();
