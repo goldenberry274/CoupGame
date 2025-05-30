@@ -17,13 +17,14 @@ TEST_CASE("Player constructor validation") {
     CHECK_THROWS_AS(Player("John", "InvalidRole"), std::invalid_argument);
 }
 
+
 TEST_CASE("Player copy constructor copies all relevant fields correctly") {
     Player original("Alice", "Merchant");
     
     // Set some state
-    original.change_coins(5, true);          // Assume this sets coin_num to 5
-    original.when_sanctioned();     // Assume you have a setter or set directly if public/protected
-    original.when_couped();         // Again, assume you have a setter
+    original.change_coins(5, true);          
+    original.when_sanctioned();     
+    original.when_couped();         
     original.bribe();       // -4 coins
     Player* target = new Player("Bob", "Spy");
     target->change_coins(2, true); 
@@ -43,6 +44,7 @@ TEST_CASE("Player copy constructor copies all relevant fields correctly") {
 
     // Check that they are different objects
     CHECK(&copy != &original);
+    delete target;
 }
 
 
@@ -64,13 +66,14 @@ TEST_CASE("Spy copy constructor") {
     original->change_coins(3, true);
     cout << "Original has " << original->coins() << " coins" << endl;
     original->when_sanctioned();
-    Spy* copy = original;
+    Spy* copy = new Spy(*(original));
     cout << "Copy has " << copy->coins() << " coins" << endl;
     CHECK(copy->name() == "OriginalSpy");
     CHECK(copy->role() == "Spy");
     CHECK(copy->coins() == 3);
     CHECK(copy->is_sanctioned() == true);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("Baron copy constructor") {
@@ -88,6 +91,7 @@ TEST_CASE("Baron copy constructor") {
     CHECK(copy->coins() == 6);  // when_sanctioned gives +1
     CHECK(copy->is_sanctioned() == true);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("Governor copy constructor") {
@@ -103,6 +107,7 @@ TEST_CASE("Governor copy constructor") {
     CHECK(copy->role() == "Governor");
     CHECK(copy->coins() == 2);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("General copy constructor") {
@@ -118,6 +123,7 @@ TEST_CASE("General copy constructor") {
     CHECK(copy->role() == "General");
     CHECK(copy->coins() == 5);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("Merchant copy constructor") {
@@ -135,6 +141,7 @@ TEST_CASE("Merchant copy constructor") {
     CHECK(copy->coins() == 0);
     CHECK(copy->get_extra_turns() == 2);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("Judge copy constructor") {
@@ -150,6 +157,7 @@ TEST_CASE("Judge copy constructor") {
     CHECK(copy->role() == "Judge");
     CHECK(copy->coins() == 1);
     CHECK(copy->alive() == true);
+    delete copy;
 }
 
 TEST_CASE("Game copy constructor") {
