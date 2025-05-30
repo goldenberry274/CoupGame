@@ -9,7 +9,8 @@ namespace coup{
 	class Spy: public Player{
 		public:
 			Spy(Game& game, string name);
-
+			Spy(const Spy& copy);
+			Spy(const Player& copy);
 			~Spy();
 			//Spy has a turn ability. Returns true.
 			bool can_use_turn_ability() const override;
