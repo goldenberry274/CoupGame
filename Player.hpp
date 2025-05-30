@@ -21,7 +21,6 @@ namespace coup {
         Player(string cpy_name, string cpy_role);
         Player(const Player& copy);
         virtual ~Player();
-
         // === Getters ===
         size_t coins() const;
         string name() const;
@@ -62,7 +61,7 @@ namespace coup {
         void bribe();                   // -4 coins, +2 extra turns (can be blocked)
         
         // Get number of extra turns
-        size_t get_extra_turns();   
+        size_t get_extra_turns() const;   
         // Used when the Player used an extra turn. -1 extra turns.      
         void subtract_turn();           
         // === Interactions with other players ===
@@ -89,7 +88,7 @@ namespace coup {
         virtual bool can_use_realtime_ability() const;
         //Returns nothing
         //See General.hpp, Spy.hpp and Judge.hpp for the overridings of this method
-        virtual void realtime_ability() ;
+        virtual void realtime_ability();
 
         //Functions that uare called when an action is undone (Undones the action that was performed) 
         virtual void undo_tax();
